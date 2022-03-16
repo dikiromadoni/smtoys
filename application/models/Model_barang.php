@@ -1,24 +1,29 @@
 
 <?php
 
-class model_barang extends CI_Model{
+class Model_barang extends CI_Model
+{
 
 	function tampil_data()
 	{
-		return 
-		$this->db->join('kategori','kategori.id_kategori = barang.id_kategori','left')
-		->distinct()
-		->get('barang');
-
+		return
+			$this->db->join('kategori', 'kategori.id_kategori = barang.id_kategori', 'left')
+			->join('ukuran', 'ukuran.id_ukuran = barang.ukuran', 'left')
+			->distinct()
+			->get('barang');
 	}
 
-	function tampil_dropdown(){
+	function tampilkan_ukuran()
+	{
+		return  $this->db->get('ukuran');
+	}
 
-		return 
-
-		$this->db->select('id_barang,nama_barang')
-		->from('barang')
-		->get();
+	function tampil_dropdown()
+	{
+		return
+			$this->db->select('id_barang, nama_barang')
+			->from('barang')
+			->get();
 	}
 
 	function post($data)
@@ -28,7 +33,7 @@ class model_barang extends CI_Model{
 
 	function get_one($id)
 	{
-		$param = array ('id_barang'=>$id);
+		$param = array('id_barang' => $id);
 		return $this->db->get_where('barang', $param);
 	}
 
@@ -39,9 +44,15 @@ class model_barang extends CI_Model{
 	}
 
 	function hapus($id)
-		{
-			$this->db->where('id_barang', $id);
-			$this->db->delete('barang');
-		}
+	{
+		$this->db->where('id_barang', $id);
+		$this->db->delete('barang');
+	}
+
+	function get_detail_modal($id)
+	{
+		return $this->db->where('id_barang', $id)
+			->get('barang')
+			->row();
+	}
 }
-?>
